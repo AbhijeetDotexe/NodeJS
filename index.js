@@ -1,20 +1,18 @@
 const express = require('express');
 const userModel = require('./users');
 const bodyParser = require('body-parser');
-// import express from "express";
-// import userModel from "../users"
 
 
 var app = express();
-// app.use(express.json());
+
 app.use(bodyParser.json());
 
-// Parse incoming requests with urlencoded payloads
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('views', './views')
 app.set('view engine', 'ejs')
 app.get('/',function(req,res){
-    res.send("<h1>This is just for testing purpose</h1>")
+
+    res.render('grapes.ejs')
 })
 
 app.get('/about',function(req,res){
@@ -22,15 +20,24 @@ app.get('/about',function(req,res){
 })
 
 app.get("/create",async function(req,res){
-    // let data = await userModel.create({
-    //     username: "Ajay",
-    //     Age: 22,
-    //     categories:["React","JavaScript","Python"]
-    // })
-    // res.send(data)
     res.render('index.ejs');
 })
 
+
+app.post('/save-endpoint', (req, res) => {
+    const editorState = req.body;
+    // Save the data (for simplicity, we'll just store it in memory)
+    savedData = editorState;
+    // Respond with success or an appropriate status
+    res.json({ success: true });
+  });
+  
+  // Load Endpoint
+  app.get('/load-endpoint', (req, res) => {
+    // Respond with the saved data
+    res.json(savedData || {}); // Return an empty object if no data is saved yet
+  });
+  
 app.get("/allUsers", async function(req,res){
     let allusers = await userModel.find();
     res.send(allusers);
